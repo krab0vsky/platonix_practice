@@ -1,0 +1,57 @@
+.todo{
+    margin-bottom: 1rem;
+}
+
+.todo span.completed {
+    text-decoration: line-through;
+}
+
+.todo label {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    cursor: pointer;
+    background: #f3f3f3;
+    padding: 1rem;
+}
+
+.todo i{
+    z-index: 2;
+}
+
+ /* Была проблема, что метка "Todo title" 
+ оставалась на месте и закрывала текст, когда пользователь вводил его в поле. 
+
+Добавленный CSS-код позволяет метке подниматься вверх при вводе,
+ освобождая место для текста.*/
+
+.input-field {  
+    position: relative; 
+    margin-bottom: 1.5rem; 
+}
+
+.input-field input {
+    width: 100%; 
+    padding: 10px; 
+    border: 1px solid #ccc; 
+    border-radius: 4px; 
+    font-size: 16px; 
+    outline: none; 
+}
+
+.input-field label {
+    position: absolute; 
+    left: 10px; 
+    top: 10px; 
+    transition: all 0.2s ease;
+    color: #aaa; 
+    pointer-events: none; 
+}
+
+.input-field input:focus + label, 
+.input-field input:not(:placeholder-shown) + label { 
+    top: -10px; 
+    font-size: 12px; 
+    color: #000; 
+}
