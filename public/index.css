@@ -1,5 +1,6 @@
 .todo{
     margin-bottom: 1rem;
+    padding: 0.3rem;
 }
 
 .todo span.completed {
@@ -13,7 +14,8 @@
     justify-content: space-between;
     cursor: pointer;
     background: #f3f3f3;
-    padding: 1rem;
+    padding: 1.2rem;
+    border-radius: 5px;
 }
 
 .todo i{
@@ -28,22 +30,22 @@
 
 .input-field {  
     position: relative; 
-    margin-bottom: 1.5rem; 
+    margin-bottom: 2rem; 
 }
 
 .input-field input {
     width: 100%; 
-    padding: 10px; 
+    padding: 12px; 
     border: 1px solid #ccc; 
-    border-radius: 4px; 
+    border-radius: 6px; 
     font-size: 16px; 
     outline: none; 
 }
 
 .input-field label {
     position: absolute; 
-    left: 10px; 
-    top: 10px; 
+    left: 12px; 
+    top: 12px; 
     transition: all 0.2s ease;
     color: #aaa; 
     pointer-events: none; 
@@ -54,4 +56,8 @@
     top: -10px; 
     font-size: 12px; 
     color: #000; 
+}
+
+.brand-logo {
+    margin-left: 20px; 
 }
