@@ -31,14 +31,13 @@ router.post('/create', async (req, res) => {
     res.redirect('/')
 })
 
-router.post('/complete', async (req, res) => {
-    const todo = await Todo.findByPk(req.body.id); 
-
-    if (todo) {
-        todo.completed = !!req.body.completed
-        await todo.save();
-    }
-
-    res.redirect('/'); 
+router.get('/update-todo', async (req, res) => {
+    var id = req.query.id;
+    var completed = req.query.completed == 1; 
+    var todo = await Todo.findByPk(id);
+    todo.completed = completed;
+    await todo.save();
+    res.json({ success: true });
 });
+
 export default router;
