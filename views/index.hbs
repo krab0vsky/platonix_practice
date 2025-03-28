@@ -1,27 +1,18 @@
 <h2>Todo page</h2>
 
 {{#if todos.length}}
-<ul>
+<ul id="todo-list">
 {{#each todos}}
 <li class="todo">
-    <form action="/complete" method="POST">
-        <label>
-            {{#if completed}}
-            <input type="checkbox" checked name="completed">
-            <span class="completed">{{title}}</span>
-            {{else}}
-            <input type="checkbox" name="completed">
-            <span>{{title}}</span>
-            {{/if}}
-
-            <input type="hidden" value="{{id}}" name="id">
-
-            <button class="btn btn-small" type="submit">Save</button>
-        </label>
-    </form>
+    <label>
+        <input type="checkbox" class="todo-checkbox" data-id="{{id}}" {{#if completed}}checked{{/if}}>
+        <span class="{{#if completed}}completed{{/if}}">{{title}}</span>
+    </label>
 </li>
 {{/each}}
 </ul>
 {{else}}
 <p>No todos!</p>
 {{/if}}
+
+<script src="/main.js"></script>
