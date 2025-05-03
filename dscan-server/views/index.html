@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <title>Устройства в сети</title>
+  <link rel="stylesheet" href="/style.css">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body data-total="{{dataTotal}}" data-connected="{{dataConnected}}" data-disconnected="{{dataDisconnected}}">
+
+  <h1>Устройства в сети</h1>
+
+  <div class="analytics">
+    <div class="stats">
+      <p>Всего устройств: <span id="total-count"></span></p>
+      <p>Подключено: <span id="connected-count"></span></p>
+      <p>Отключено: <span id="disconnected-count"></span></p>
+    </div>
+    <canvas id="pieChart" width="200" height="200"></canvas>
+  </div>
+
+  <div class="controls">
+    <input type="text" id="searchInput" placeholder="Поиск по имени...">
+    <button onclick="filterDevices('all')">Все устройства</button>
+    <button onclick="filterDevices('connected')">Подключенные</button>
+    <button onclick="filterDevices('disconnected')">Отключенные</button>
+    <button onclick="showHistory()">История</button>
+  </div>
+
+  <div class="cards-container" id="device-list"></div>
+
+  <script>
+    const totalDevices = Number(document.body.dataset.total);
+    const connectedDevices = Number(document.body.dataset.connected);
+    const disconnectedDevices = Number(document.body.dataset.disconnected);
+
+    document.getElementById("total-count").textContent = totalDevices;
+    document.getElementById("connected-count").textContent = connectedDevices;
+    document.getElementById("disconnected-count").textContent = disconnectedDevices;
+
+    const devices = JSON.parse('{{devicesJson}}');
+    let currentFilter = 'all';
+
+    function createCard(device) {
+      const card = document.createElement('div');
+      card.className = 'device-card';
+      card.innerHTML = `
+        <div class="top-row">
+          <strong>${device.name || 'Без имени'}</strong>
+          <span class="time">${new Date(device.last_seen).toLocaleString()}</span>
+        </div>
+        <div class="status ${device.connected ? 'on' : 'off'}">
+          ${device.connected ? 'Подключен' : 'Отключен'}
+        </div>
+        <div class="info">IP: ${device.ip}</div>
+        <div class="info">MAC: ${device.mac}</div>
+        <div class="info">Тип: ${device.type || '—'}</div>
+        <div class="info">Производитель: ${device.vendor || '—'}</div>
+        <div class="info">ОС: ${device.os_guess || '—'}</div>
+      `;
+      return card;
+    }
+
+    function renderCards() {
+      const list = document.getElementById('device-list');
+      list.innerHTML = '';
+      const search = document.getElementById('searchInput').value.toLowerCase();
+      const filtered = devices.filter(d => {
+        const match = d.name && d.name.toLowerCase().includes(search);
+        if (currentFilter === 'connected') return d.connected && match;
+        if (currentFilter === 'disconnected') return !d.connected && match;
+        return match;
+      });
+      if (filtered.length === 0) {
+        list.innerHTML = '<p>Нет устройств</p>';
+      } else {
+        filtered.forEach(d => list.appendChild(createCard(d)));
+      }
+    }
+
+    function filterDevices(type) {
+      currentFilter = type;
+      renderCards();
+    }
+
+    function showHistory() {
+      window.location.href = '/history';
+    }
+
+    new Chart(document.getElementById("pieChart"), {
+      type: 'pie',
+      data: {
+        labels: ['Подключено', 'Отключено'],
+        datasets: [{
+          data: [connectedDevices, disconnectedDevices],
+          backgroundColor: ['green', 'red']
+        }]
+      },
+      options: {
+        plugins: {
+          legend: { position: 'bottom' }
+        }
+      }
+    });
+
+    document.getElementById('searchInput').addEventListener('input', renderCards);
+    renderCards();
+  </script>
+</body>
+</html>
